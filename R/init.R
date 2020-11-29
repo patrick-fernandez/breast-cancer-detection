@@ -3,6 +3,7 @@ library(ggplot2)
 library(caret)
 library(MLeval)
 
+#data loading
 data <- as_tibble(read.table("data/wdbc.data", sep = ","))
 #rename variables
 data <- data %>% rename(ID = V1, Diagnosis = V2, 
@@ -23,7 +24,9 @@ data <- data %>% rename(ID = V1, Diagnosis = V2,
 #Set Diagnosis as factor
 data$Diagnosis <- as.factor(data$Diagnosis) %>% factor(c("M", "B"))
 
-#Visualization
+#check correlation
+correlationMatrix <- cor(data[,3:ncol(data)]) #note that predictors are highly correlated
+#Visualization of predictors
 ggplot((data %>% select(3:32) %>% gather()), aes(value)) + 
   geom_histogram(bins = 20) +
   facet_wrap(~key, scales = 'free_x')
